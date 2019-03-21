@@ -31,6 +31,7 @@ class RegisterActivity : DaggerAppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RegisterViewModel::class.java)
 
+        initView()
         initListener()
     }
 
@@ -51,5 +52,13 @@ class RegisterActivity : DaggerAppCompatActivity() {
                 description.text.toString()
             )
         }
+    }
+
+    private fun initView(){
+        nameText.text = "${getText(R.string.name)}:"
+        dateText.text = "${getText(R.string.date)}:"
+        emailText.text = "${getText(R.string.email)}:"
+        passwordText.text = "${getText(R.string.pass)}:"
+        descriptionText.text = "${getText(R.string.description)}:"
     }
 }

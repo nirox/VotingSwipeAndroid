@@ -16,8 +16,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            android:hint="Email"
-            android:textSize="20dp"
+            android:hint="@string/email"
+            android:textSize="20sp"
 
     />
 
@@ -31,8 +31,8 @@
             android:inputType="textPassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:hint="Password"
-            android:textSize="20dp"
+            android:hint="@string/password"
+            android:textSize="20sp"
     />
 
     <Button
@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/login"
-            android:textSize="18dp"
+            android:textSize="18sp"
     />
 
     <Button
@@ -57,8 +57,8 @@
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="Register"
-            android:textSize="18dp"
+            android:text="@string/register"
+            android:textSize="18sp"
 
     />
 

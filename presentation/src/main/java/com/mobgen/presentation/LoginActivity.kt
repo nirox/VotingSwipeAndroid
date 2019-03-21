@@ -40,17 +40,14 @@ class LoginActivity : DaggerAppCompatActivity() {
 
                 when (data.status) {
                     BaseViewModel.Status.LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                        progressBar.isIndeterminate = true
+                        changeVisiblility(true)
                     }
                     BaseViewModel.Status.SUCCESS -> {
-                        progressBar.visibility = View.GONE
-                        progressBar.isIndeterminate = false
+                        changeVisiblility(false)
                         //TODO go to next activity, user authenticated
                     }
                     BaseViewModel.Status.ERROR -> {
-                        progressBar.visibility = View.GONE
-                        progressBar.isIndeterminate = false
+                        changeVisiblility(false)
                         //TODO show dialog with user or password wrong
                     }
                 }
@@ -60,16 +57,18 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CODE_REQUEST_REGISTER) {
-            if (resultCode == Activity.RESULT_OK) {
-                data?.let {
-                    viewModel.authenticate(
-                        it.getStringExtra(RegisterActivity.EXTRA_EMAIL),
-                        it.getStringExtra(RegisterActivity.EXTRA_PASS)
-                    )
-                }
+        if (requestCode == CODE_REQUEST_REGISTER && resultCode == Activity.RESULT_OK) {
+            data?.let {
+                viewModel.authenticate(
+                    it.getStringExtra(RegisterActivity.EXTRA_EMAIL),
+                    it.getStringExtra(RegisterActivity.EXTRA_PASS)
+                )
             }
         }
     }
 
+    private fun changeVisiblility(visible: Boolean) {
+        progressBar.visibility = if (visible) View.VISIBLE else View.GONE
+        progressBar.isIndeterminate = visible
+    }
 }

@@ -20,6 +20,7 @@ buildscript {
         googleServices_version = '4.2.0'
         gradle_version = "3.3.2"
         firebase_version = "16.0.8"
+        firebaseDatabase_version = "16.1.0"
     }
     repositories {
         google()

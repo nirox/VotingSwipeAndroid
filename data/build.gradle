@@ -42,6 +42,7 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "com.android.support.test:runner:$testRunner_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
+
     //rxkotlin
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid_version"
@@ -50,6 +51,7 @@ dependencies {
     implementation "javax.inject:javax.inject:$javaxInjectVersion"
     implementation "com.google.dagger:dagger:$daggerVersion"
 
+    implementation "com.google.firebase:firebase-core:$firebase_version"
     implementation "com.google.firebase:firebase-database:$firebaseDatabase_version"
 
     implementation project(':domain')

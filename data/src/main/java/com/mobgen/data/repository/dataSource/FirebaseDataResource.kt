@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.mobgen.data.entity.UserEntity
+import com.mobgen.data.repository.FireBaseUtil
 import com.mobgen.domain.check
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -21,9 +22,9 @@ class FirebaseDataResource @Inject constructor() {
         return Single.create { emitter ->
             getUser(
                 email,
-                onSuccess = { data ->
-                    if (data.child(UserEntity.Attribute.PASSWORD.aName).value as String == password) {
-                        emitter.onSuccess(createUser(data))
+                onSuccess = { dataSnapshot ->
+                    if (dataSnapshot.child(UserEntity.Attribute.PASSWORD.aName).value as String == password) {
+                        emitter.onSuccess(FireBaseUtil.createUser(dataSnapshot))
                     } else {
                         emitter.onError(Throwable("Wrong email or password"))
                     }
@@ -59,7 +60,7 @@ class FirebaseDataResource @Inject constructor() {
 
     private fun getUser(
         email: String,
-        onSuccess: (dataSnapshot: DataSnapshot) -> Unit,
+        onSuccess: (data: DataSnapshot) -> Unit,
         onError: (Throwable) -> Unit
     ) {
         database.child(USER_CHILD)
@@ -82,17 +83,4 @@ class FirebaseDataResource @Inject constructor() {
             })
     }
 
-    private fun createUser(dataSnapshot: DataSnapshot): UserEntity {
-        return UserEntity(
-            dataSnapshot.child(UserEntity.Attribute.NAME.aName).value as String,
-            dataSnapshot.child(UserEntity.Attribute.PASSWORD.aName).value as String,
-            dataSnapshot.child(UserEntity.Attribute.EMAIL.aName).value as String,
-            dataSnapshot.child(UserEntity.Attribute.BIRTHDAY.aName).value as String,
-            dataSnapshot.child(UserEntity.Attribute.DESCRIPTION.aName).value as String,
-            (dataSnapshot.child(UserEntity.Attribute.LIKES.aName).value
-                ?: mapOf<String, String>()) as Map<String, String>,
-            (dataSnapshot.child(UserEntity.Attribute.PHOTOS.aName).value
-                ?: mapOf<String, String>()) as Map<String, String>
-        )
-    }
 }

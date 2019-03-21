@@ -8,7 +8,8 @@ import dagger.android.support.AndroidSupportInjectionModule
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
-        MainModule::class
+        MainModule::class,
+        RepositoryModule::class
     ]
 )
 interface AppComponent : AndroidInjector<VotingSwipeApplication> {

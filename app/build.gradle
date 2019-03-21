@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'com.google.gms.google-services'
-
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
@@ -33,14 +31,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:$appcompat_version"
-    implementation "com.android.support.constraint:constraint-layout:$constraintLayout_version"
-    implementation "com.android.support:design:$design_version"
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "com.android.support.test:runner:$testRunner_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
@@ -59,4 +52,7 @@ dependencies {
     implementation project(':domain')
     implementation project(':data')
     implementation project(':presentation')
+
 }
+
+apply plugin: 'com.google.gms.google-services'

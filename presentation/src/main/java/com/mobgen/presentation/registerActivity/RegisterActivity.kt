@@ -35,6 +35,11 @@ class RegisterActivity : DaggerAppCompatActivity() {
         initListener()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     private fun initListener() {
         registerButton.setOnClickListener {
 
@@ -54,11 +59,19 @@ class RegisterActivity : DaggerAppCompatActivity() {
         }
     }
 
-    private fun initView(){
+    private fun initView() {
+        buttonBackInActionBar(true)
         nameText.text = "${getText(R.string.name)}:"
         dateText.text = "${getText(R.string.date)}:"
         emailText.text = "${getText(R.string.email)}:"
         passwordText.text = "${getText(R.string.pass)}:"
         descriptionText.text = "${getText(R.string.description)}:"
+    }
+
+    private fun buttonBackInActionBar(check: Boolean) {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(check)
+            setDisplayShowHomeEnabled(check)
+        }
     }
 }

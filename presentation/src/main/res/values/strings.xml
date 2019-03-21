@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">presentation</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="login">Login</string>
+    <string name="name">NAME:</string>
+    <string name="email">EMAIL:</string>
+    <string name="date">DATE:</string>
+    <string name="pass">PASS:</string>
+    <string name="description">DESCRIPTION:</string>
 </resources>

@@ -7,22 +7,18 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.StrictMode
 import android.provider.MediaStore
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.mobgen.domain.addSuffix
-import com.mobgen.domain.check
 import com.mobgen.presentation.BaseViewModel
 import com.mobgen.presentation.R
+import com.mobgen.presentation.Util
 import com.mobgen.presentation.ViewModelFactory
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.register_main.*
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 
@@ -85,7 +81,7 @@ class RegisterActivity : DaggerAppCompatActivity() {
             val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
             StrictMode.setVmPolicy(builder.build())
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            file = Uri.fromFile(getOutputMediaFile())
+            file = Uri.fromFile(Util.getOutputMediaFile(getString(R.string.app_name)))
             intent.putExtra(MediaStore.EXTRA_OUTPUT, file)
             startActivityForResult(intent, GET_FROM_CAMERA)
         }
@@ -96,7 +92,7 @@ class RegisterActivity : DaggerAppCompatActivity() {
 
         if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             data?.data?.let {
-                photoList.add(getPathFromURI(it))
+                photoList.add(Util.getPathFromURI(it, contentResolver))
                 photo.setImageURI(it)
             }
         }
@@ -106,45 +102,6 @@ class RegisterActivity : DaggerAppCompatActivity() {
             photoList.add(file.path ?: "")
         }
 
-    }
-
-    fun getPathFromURI(uri: Uri): String {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        var path = ""
-        val cursor = contentResolver.query(uri, projection, null, null, null)
-        cursor.check(
-            ifNotNull = {
-                val columnIndex = it.getColumnIndex(MediaStore.Images.Media.DATA)
-                it.moveToFirst()
-                path = it.getString(columnIndex).toString()
-            },
-            ifNull = {
-                throw Throwable("Uri can not be obtained")
-            }
-        )
-
-        cursor?.close()
-        return path
-    }
-
-    private fun getOutputMediaFile(): File? {
-        val mediaStorageDir = File(
-            Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES
-            ), "CameraDemo"
-        )
-
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return null
-            }
-        }
-
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        return File(
-            mediaStorageDir.path + File.separator +
-                    "IMG_" + timeStamp + ".jpg"
-        )
     }
 
     private fun initView() {
@@ -171,55 +128,11 @@ class RegisterActivity : DaggerAppCompatActivity() {
                         })
                         finish()
                     }
-                    BaseViewModel.Status.ERROR -> {
+                    else -> {
                         changeVisiblility(false)
                         hideKeyboard()
-
-                        when (data.error) {
-                            RegisterViewModel.ErrorRegister.NAME -> createToast(
-                                String.format(
-                                    getString(R.string.fill),
-                                    getString(R.string.name).toLowerCase(),
-                                    ""
-                                )
-                            )
-                            RegisterViewModel.ErrorRegister.DATE -> createToast(
-                                String.format(
-                                    getString(R.string.fill),
-                                    getString(R.string.date).toLowerCase(),
-                                    getString(R.string.slashes).toLowerCase()
-                                )
-                            )
-                            RegisterViewModel.ErrorRegister.EMAIL -> createToast(
-                                String.format(
-                                    getString(R.string.fill),
-                                    getString(R.string.email).toLowerCase(),
-                                    getString(R.string.symbols).toLowerCase()
-                                )
-                            )
-                            RegisterViewModel.ErrorRegister.PASSWORD -> createToast(
-                                String.format(
-                                    getString(R.string.fill),
-                                    getString(R.string.password).toLowerCase(),
-                                    getString(R.string.minChars).toLowerCase()
-                                )
-                            )
-                            RegisterViewModel.ErrorRegister.DESCRIPTION -> createToast(
-                                String.format(
-                                    getString(R.string.fill),
-                                    getString(R.string.description).toLowerCase(),
-                                    ""
-                                )
-                            )
-                            RegisterViewModel.ErrorRegister.NOT_REGISTERED -> createToast(
-                                getString(R.string.notRegistered)
-                            )
-                            RegisterViewModel.ErrorRegister.USER_EXISTS -> createToast(
-                                getString(R.string.userExists)
-                            )
-                            RegisterViewModel.ErrorRegister.NOT_KEY -> createToast(
-                                getString(R.string.notKey)
-                            )
+                        data.error?.let { error ->
+                            showError(error)
                         }
                     }
                 }
@@ -252,6 +165,55 @@ class RegisterActivity : DaggerAppCompatActivity() {
             (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
                 it.windowToken,
                 0
+            )
+        }
+    }
+
+    private fun showError(errorRegister: RegisterViewModel.ErrorRegister) {
+        when (errorRegister) {
+            RegisterViewModel.ErrorRegister.NAME -> createToast(
+                String.format(
+                    getString(R.string.fill),
+                    getString(R.string.name).toLowerCase(),
+                    ""
+                )
+            )
+            RegisterViewModel.ErrorRegister.DATE -> createToast(
+                String.format(
+                    getString(R.string.fill),
+                    getString(R.string.date).toLowerCase(),
+                    getString(R.string.slashes).toLowerCase()
+                )
+            )
+            RegisterViewModel.ErrorRegister.EMAIL -> createToast(
+                String.format(
+                    getString(R.string.fill),
+                    getString(R.string.email).toLowerCase(),
+                    getString(R.string.symbols).toLowerCase()
+                )
+            )
+            RegisterViewModel.ErrorRegister.PASSWORD -> createToast(
+                String.format(
+                    getString(R.string.fill),
+                    getString(R.string.password).toLowerCase(),
+                    getString(R.string.minChars).toLowerCase()
+                )
+            )
+            RegisterViewModel.ErrorRegister.DESCRIPTION -> createToast(
+                String.format(
+                    getString(R.string.fill),
+                    getString(R.string.description).toLowerCase(),
+                    ""
+                )
+            )
+            RegisterViewModel.ErrorRegister.NOT_REGISTERED -> createToast(
+                getString(R.string.notRegistered)
+            )
+            RegisterViewModel.ErrorRegister.USER_EXISTS -> createToast(
+                getString(R.string.userExists)
+            )
+            RegisterViewModel.ErrorRegister.NOT_KEY -> createToast(
+                getString(R.string.notKey)
             )
         }
     }

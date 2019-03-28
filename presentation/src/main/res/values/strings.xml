@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">presentation</string>
+    <string name="app_name">VotingSwipe</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="login">Login</string>
     <string name="name">Name</string>

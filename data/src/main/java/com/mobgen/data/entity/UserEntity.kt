@@ -9,8 +9,8 @@ data class UserEntity(
     val email: String,
     val birthDay: String,
     val description: String,
-    val likes: Map<String, String>,
-    val photos: Map<String, String>
+    var likes: Map<String, String>,
+    var photos: Map<String, String>
 ) {
     @Exclude
     fun toMap(): Map<String, Any> = HashMap<String, Any>().apply {

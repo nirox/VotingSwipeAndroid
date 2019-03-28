@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "768907401640-2721ekqi0mrpavpskqm1cgs0kcl2urbj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobgen.votingswipe",
+            "certificate_hash": "cac50de2d47b7d775fe2b1be57f9ac4eff351c12"
+          }
+        },
+        {
           "client_id": "768907401640-nt6p46cj3foubiekoksueobt40k2aikv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768907401640-nt6p46cj3foubiekoksueobt40k2aikv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "768907401640-385pggmlhoou9bh4estmg98043ndrsni.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "nickelstudio.VotingSwipeSwift"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2

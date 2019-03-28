@@ -41,3 +41,5 @@ fun <T> Single<T>.subscribe(
             onError(it)
         })
 }
+
+fun String.addSuffix(suffix: String) = "$this$suffix"

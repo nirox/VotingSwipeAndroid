@@ -1,8 +1,8 @@
 package com.mobgen.votingswipe.di
 
 import android.content.Context
-import com.mobgen.presentation.LoginActivity
-import com.mobgen.presentation.registerActivity.RegisterActivity
+import com.mobgen.presentation.login.LoginActivity
+import com.mobgen.presentation.register.RegisterActivity
 import com.mobgen.votingswipe.VotingSwipeApplication
 import dagger.Binds
 import dagger.Module

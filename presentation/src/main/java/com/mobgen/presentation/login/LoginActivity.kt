@@ -1,4 +1,4 @@
-package com.mobgen.presentation
+package com.mobgen.presentation.login
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
@@ -6,7 +6,12 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.mobgen.presentation.registerActivity.RegisterActivity
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import com.mobgen.presentation.BaseViewModel
+import com.mobgen.presentation.R
+import com.mobgen.presentation.ViewModelFactory
+import com.mobgen.presentation.register.RegisterActivity
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.login_main.*
 import javax.inject.Inject
@@ -32,7 +37,9 @@ class LoginActivity : DaggerAppCompatActivity() {
         }
 
         goToRegister.setOnClickListener {
-            startActivityForResult(RegisterActivity.newInstance(this), CODE_REQUEST_REGISTER)
+            startActivityForResult(RegisterActivity.newInstance(this),
+                CODE_REQUEST_REGISTER
+            )
         }
 
         viewModel.data.observe(this, Observer {
@@ -48,7 +55,8 @@ class LoginActivity : DaggerAppCompatActivity() {
                     }
                     BaseViewModel.Status.ERROR -> {
                         changeVisiblility(false)
-                        //TODO show dialog with user or password wrong
+                        hideKeyboard()
+                        Toast.makeText(this, data.errorMessage, Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -57,6 +65,7 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == CODE_REQUEST_REGISTER && resultCode == Activity.RESULT_OK) {
             data?.let {
                 viewModel.authenticate(
@@ -70,5 +79,14 @@ class LoginActivity : DaggerAppCompatActivity() {
     private fun changeVisiblility(visible: Boolean) {
         progressBar.visibility = if (visible) View.VISIBLE else View.GONE
         progressBar.isIndeterminate = visible
+    }
+
+    private fun hideKeyboard() {
+        currentFocus?.let {
+            (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                it.windowToken,
+                0
+            )
+        }
     }
 }

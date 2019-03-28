@@ -1,12 +1,21 @@
 <resources>
-    <string name="app_name">presentation</string>
+    <string name="app_name">VotingSwipe</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="login">Login</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="date">Date</string>
-    <string name="pass">Pass</string>
     <string name="password">Password</string>
     <string name="description">Description</string>
+    <string name="photo">Photo</string>
     <string name="register">Register</string>
+    <string name="fill">Please fill %1$s field %2$s</string>
+    <string name="symbols">using @ and . symbols</string>
+    <string name="slashes">using format 31/12/2000</string>
+    <string name="minChars">%1$s field must have 6 characters at least</string>
+    <string name="notRegistered">User can not be registered</string>
+    <string name="userExists">Email already exists</string>
+    <string name="notKey">Could not get push key for users</string>
+    <string name="upload">Upload</string>
+    <string name="take">Take</string>
 </resources>

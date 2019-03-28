@@ -15,6 +15,11 @@ class UserRepositoryImpl @Inject constructor(
     private val userDataMapper: UserDataMapper,
     private val firebaseDataResource: FirebaseDataResource
 ) : UserRepository {
+    override fun getUsers(): Single<List<User>> {
+        //TODO
+        return Single.create { }
+    }
+
     companion object {
         private var userCache: User? = null
     }

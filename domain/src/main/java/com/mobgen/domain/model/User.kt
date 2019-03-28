@@ -5,6 +5,6 @@ data class User(
     val email: String,
     val birthDay: String,
     val description: String,
-    val likes: List<String>,
-    val photos: List<String>
+    val likes: List<String> = listOf(),
+    val photos: List<String> = listOf()
 )

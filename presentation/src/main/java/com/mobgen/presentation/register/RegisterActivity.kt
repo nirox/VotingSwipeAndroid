@@ -56,50 +56,6 @@ class RegisterActivity : BaseActivity() {
         return true
     }
 
-    private fun initListener() {
-        registerButton.setOnClickListener {
-            viewModel.registration(
-                name.text.toString(),
-                date.text.toString(),
-                emailReg.text.toString(),
-                passwordReg.text.toString(),
-                description.text.toString(),
-                photoList.toList()
-            )
-        }
-
-        photoUpload.setOnClickListener {
-            startActivityForResult(
-                Intent(
-                    Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI
-                ), GET_FROM_GALLERY
-            )
-        }
-
-        photoTake.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-
-                ActivityCompat.requestPermissions(
-                    this, arrayOf(
-                        android.Manifest.permission.CAMERA,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ), CAMERA_PERMISSON
-                )
-            } else {
-                openCamera()
-            }
-        }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             CAMERA_PERMISSON -> {
@@ -111,15 +67,6 @@ class RegisterActivity : BaseActivity() {
                 return
             }
         }
-    }
-
-    private fun openCamera() {
-        val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
-        StrictMode.setVmPolicy(builder.build())
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        file = Uri.fromFile(Util.getOutputMediaFile(getString(R.string.app_name)))
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, file)
-        startActivityForResult(intent, GET_FROM_CAMERA)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -139,6 +86,12 @@ class RegisterActivity : BaseActivity() {
     }
 
     private fun initView() {
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
+
         buttonBackInActionBar(true)
         nameText.text = getString(R.string.name).addSuffix(SUFFIX_FIELDS_NAMES)
         dateText.text = getString(R.string.date).addSuffix(SUFFIX_FIELDS_NAMES)
@@ -232,6 +185,62 @@ class RegisterActivity : BaseActivity() {
             RegisterViewModel.ErrorRegister.NOT_KEY -> createToast(
                 getString(R.string.notKey)
             )
+            RegisterViewModel.ErrorRegister.NOT_PHOTO -> createToast(
+                getString(R.string.notPhoto)
+            )
+        }
+    }
+
+    private fun openCamera() {
+        val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        file = Uri.fromFile(Util.getOutputMediaFile(getString(R.string.app_name)))
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, file)
+        startActivityForResult(intent, GET_FROM_CAMERA)
+    }
+
+    private fun initListener() {
+        registerButton.setOnClickListener {
+            viewModel.registration(
+                name.text.toString(),
+                date.text.toString(),
+                emailReg.text.toString(),
+                passwordReg.text.toString(),
+                description.text.toString(),
+                photoList.toList()
+            )
+        }
+
+        photoUpload.setOnClickListener {
+            startActivityForResult(
+                Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI
+                ), GET_FROM_GALLERY
+            )
+        }
+
+        photoTake.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), CAMERA_PERMISSON
+                )
+            } else {
+                openCamera()
+            }
         }
     }
 

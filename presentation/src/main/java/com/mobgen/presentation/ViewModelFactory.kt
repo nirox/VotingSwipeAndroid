@@ -25,7 +25,11 @@ class ViewModelFactory @Inject constructor(
                 authenticate
             )
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> RegisterViewModel(register)
-            modelClass.isAssignableFrom(SwipeViewModel::class.java) -> SwipeViewModel(getUsers, userBindViewMapper)
+            modelClass.isAssignableFrom(SwipeViewModel::class.java) -> SwipeViewModel(
+                getUsers,
+                updateUser,
+                userBindViewMapper
+            )
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         } as T
     }

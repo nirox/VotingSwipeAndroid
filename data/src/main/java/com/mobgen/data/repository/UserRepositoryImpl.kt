@@ -44,12 +44,20 @@ class UserRepositoryImpl @Inject constructor(
             )
         }
     }
+
     override fun getUsers(): Single<List<User>> =
         firebaseDataResource.getUsers(userCache?.email, userCache?.likes ?: mapOf()).map { userDataMapper.map(it) }
 
-    override fun updateUser(likes: List<String>): Completable =
-        firebaseDataResource.updateUser(userCache?.apply {
-            this.likes = likes.mapIndexed { index: Int, string: String -> index.toString() to string }.toMap()
+    override fun updateUser(likes: List<String>): Completable {
+        val userAuthenticateLikes = userCache?.likes?.toMutableMap()
+        userAuthenticateLikes?.putAll(likes.mapIndexedNotNull { index: Int, string: String ->
+            if (!userAuthenticateLikes.values.contains(string)) (userAuthenticateLikes.size + index).toString() to string else null
+        }
+            .toMap())
+        return firebaseDataResource.updateUser(userCache?.apply {
+            this.likes = userAuthenticateLikes?.toMap() ?: mapOf()
         })
+    }
+
 
 }

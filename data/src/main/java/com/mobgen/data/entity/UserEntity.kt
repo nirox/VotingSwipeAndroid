@@ -4,8 +4,9 @@ import com.google.firebase.database.Exclude
 
 
 data class UserEntity(
+    val id: String,
     val name: String,
-    val password: String,
+    val password: String? = null,
     val email: String,
     val birthDay: String,
     val description: String,
@@ -15,7 +16,7 @@ data class UserEntity(
     @Exclude
     fun toMap(): Map<String, Any> = HashMap<String, Any>().apply {
         this[Attribute.NAME.aName] = name
-        this[Attribute.PASSWORD.aName] = password
+        password?.let { this[Attribute.PASSWORD.aName] = it }
         this[Attribute.EMAIL.aName] = email
         this[Attribute.BIRTHDAY.aName] = birthDay
         this[Attribute.DESCRIPTION.aName] = description

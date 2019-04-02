@@ -1,14 +1,18 @@
 package com.mobgen.presentation.register
 
+import android.Manifest
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.view.View
 import com.mobgen.domain.addSuffix
 import com.mobgen.presentation.*
@@ -32,6 +36,7 @@ class RegisterActivity : BaseActivity() {
         const val MIN_CHARS = 6
         const val GET_FROM_GALLERY = 100
         const val GET_FROM_CAMERA = 101
+        const val CAMERA_PERMISSON = 1
         fun newInstance(context: Context): Intent = Intent(context, RegisterActivity::class.java)
         const val TAG = "RegisterActivity"
     }
@@ -73,13 +78,48 @@ class RegisterActivity : BaseActivity() {
         }
 
         photoTake.setOnClickListener {
-            val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
-            StrictMode.setVmPolicy(builder.build())
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            file = Uri.fromFile(Util.getOutputMediaFile(getString(R.string.app_name)))
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, file)
-            startActivityForResult(intent, GET_FROM_CAMERA)
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), CAMERA_PERMISSON
+                )
+            } else {
+                openCamera()
+            }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            CAMERA_PERMISSON -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    openCamera()
+                }
+                return
+            }
+        }
+    }
+
+    private fun openCamera() {
+        val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        file = Uri.fromFile(Util.getOutputMediaFile(getString(R.string.app_name)))
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, file)
+        startActivityForResult(intent, GET_FROM_CAMERA)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -96,7 +136,6 @@ class RegisterActivity : BaseActivity() {
             photo.setImageURI(file)
             photoList.add(file.path ?: "")
         }
-
     }
 
     private fun initView() {

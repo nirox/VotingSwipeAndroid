@@ -9,5 +9,5 @@ interface UserRepository {
     fun register(user: User, password: String): Completable
     fun getAuthUser(): Single<User>
     fun getUsers() : Single<List<User>>
-    fun update(user: User) : Completable
+    fun updateUser(likes: List<String>): Completable
 }

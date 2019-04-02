@@ -5,7 +5,9 @@ import com.mobgen.domain.useCase.Authenticate
 import com.mobgen.presentation.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 
-class LoginViewModel(private val authenticate: Authenticate) : BaseViewModel<LoginViewModel.LoginViewData>() {
+class LoginViewModel(
+    private val authenticate: Authenticate
+) : BaseViewModel<LoginViewModel.LoginViewData>() {
     private var loginViewData = LoginViewData(null, "")
 
     init {
@@ -30,6 +32,7 @@ class LoginViewModel(private val authenticate: Authenticate) : BaseViewModel<Log
             )
         }
     }
+
 
     class LoginViewData(
         override var status: Status?,

@@ -5,9 +5,10 @@ import com.mobgen.domain.model.User
 import javax.inject.Inject
 
 class UserDataMapperReverse @Inject constructor() : DataMapper<User, UserEntity> {
-    var password: String = ""
+    var password: String? = null
     override fun map(value: User): UserEntity {
         return UserEntity(
+            value.id,
             value.name,
             password,
             value.email,

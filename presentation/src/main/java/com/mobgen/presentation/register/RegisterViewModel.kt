@@ -43,7 +43,15 @@ class RegisterViewModel(private val register: Register) : BaseViewModel<Register
                 data.value = registerViewData.apply { status = Status.LOADING }
 
                 executeUseCase {
-                    register.execute(User(name, email, date, description, photos = photos), password).subscribe(
+                    register.execute(
+                        User(
+                            name = name,
+                            email = email,
+                            birthDay = date,
+                            description = description,
+                            photos = photos
+                        ), password
+                    ).subscribe(
                         executor = AndroidSchedulers.mainThread(),
                         onComplete = {
                             data.postValue(registerViewData.apply { status = Status.SUCCESS })

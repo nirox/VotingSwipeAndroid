@@ -12,10 +12,11 @@ class FireBaseUtil {
             val photos =
                 if (dataSnapshot.child(UserEntity.Attribute.PHOTOS.aName).value != null)
                     (dataSnapshot.child(UserEntity.Attribute.PHOTOS.aName).value as ArrayList<String>)
-                    .mapIndexed { index: Int, string: String -> index.toString() to string }.toMap()
+                        .mapIndexed { index: Int, string: String -> index.toString() to string }.toMap()
                 else
                     mapOf()
             return UserEntity(
+                dataSnapshot.key ?: "",
                 dataSnapshot.child(UserEntity.Attribute.NAME.aName).value as String,
                 dataSnapshot.child(UserEntity.Attribute.PASSWORD.aName).value as String,
                 dataSnapshot.child(UserEntity.Attribute.EMAIL.aName).value as String,

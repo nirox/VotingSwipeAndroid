@@ -16,6 +16,7 @@ class UserRepositoryImpl @Inject constructor(
     private val userDataMapper: UserDataMapper,
     private val firebaseDataResource: FirebaseDataResource
 ) : UserRepository {
+
     companion object {
         private var userCache: UserEntity? = null
     }
@@ -43,7 +44,6 @@ class UserRepositoryImpl @Inject constructor(
             )
         }
     }
-
     override fun getUsers(): Single<List<User>> =
         firebaseDataResource.getUsers(userCache?.email, userCache?.likes ?: mapOf()).map { userDataMapper.map(it) }
 

@@ -8,15 +8,17 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.mobgen.presentation.BaseActivity
 import com.mobgen.presentation.BaseViewModel
 import com.mobgen.presentation.R
 import com.mobgen.presentation.ViewModelFactory
 import com.mobgen.presentation.register.RegisterActivity
+import com.mobgen.presentation.swipe.SwipeActivity
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.login_main.*
+import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-class LoginActivity : DaggerAppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -28,16 +30,18 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_main)
+        setContentView(R.layout.activity_login)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
 
         loginButton.setOnClickListener {
+            hideKeyboard()
             viewModel.authenticate(email.text.toString(), password.text.toString())
         }
 
         goToRegister.setOnClickListener {
-            startActivityForResult(RegisterActivity.newInstance(this),
+            startActivityForResult(
+                RegisterActivity.newInstance(this),
                 CODE_REQUEST_REGISTER
             )
         }
@@ -47,14 +51,14 @@ class LoginActivity : DaggerAppCompatActivity() {
 
                 when (data.status) {
                     BaseViewModel.Status.LOADING -> {
-                        changeVisiblility(true)
+                        changeProgressBarVisibility(true)
                     }
                     BaseViewModel.Status.SUCCESS -> {
-                        changeVisiblility(false)
-                        //TODO go to next activity, user authenticated
+                        changeProgressBarVisibility(false)
+                        goSwipe()
                     }
                     BaseViewModel.Status.ERROR -> {
-                        changeVisiblility(false)
+                        changeProgressBarVisibility(false)
                         hideKeyboard()
                         Toast.makeText(this, data.errorMessage, Toast.LENGTH_LONG).show()
                     }
@@ -76,17 +80,14 @@ class LoginActivity : DaggerAppCompatActivity() {
         }
     }
 
-    private fun changeVisiblility(visible: Boolean) {
+    private fun changeProgressBarVisibility(visible: Boolean) {
         progressBar.visibility = if (visible) View.VISIBLE else View.GONE
         progressBar.isIndeterminate = visible
     }
 
-    private fun hideKeyboard() {
-        currentFocus?.let {
-            (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                it.windowToken,
-                0
-            )
-        }
+
+    private fun goSwipe() {
+        startActivity(SwipeActivity.newInstance(this))
     }
+
 }

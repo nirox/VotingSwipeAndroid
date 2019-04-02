@@ -14,24 +14,19 @@ import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import com.mobgen.domain.addSuffix
-import com.mobgen.presentation.BaseViewModel
-import com.mobgen.presentation.R
-import com.mobgen.presentation.Util
-import com.mobgen.presentation.ViewModelFactory
-import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.register_main.*
+import com.mobgen.presentation.*
+import kotlinx.android.synthetic.main.activity_register.*
 import javax.inject.Inject
 
 
-class RegisterActivity : DaggerAppCompatActivity() {
+class RegisterActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    lateinit var viewModel: RegisterViewModel
-    lateinit var file: Uri
+
+    private lateinit var viewModel: RegisterViewModel
+    private lateinit var file: Uri
     private var photoList = mutableListOf<String>()
 
     companion object {
@@ -48,7 +43,7 @@ class RegisterActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.register_main)
+        setContentView(R.layout.activity_register)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RegisterViewModel::class.java)
 
@@ -157,10 +152,10 @@ class RegisterActivity : DaggerAppCompatActivity() {
 
                 when (data.status) {
                     BaseViewModel.Status.LOADING -> {
-                        changeVisiblility(true)
+                        changeProgressBarVisibility(true)
                     }
                     BaseViewModel.Status.SUCCESS -> {
-                        changeVisiblility(false)
+                        changeProgressBarVisibility(false)
                         setResult(Activity.RESULT_OK, Intent(Intent.ACTION_SEND).apply {
                             putExtra(EXTRA_EMAIL, emailReg.text.toString())
                             putExtra(EXTRA_PASS, passwordReg.text.toString())
@@ -168,7 +163,7 @@ class RegisterActivity : DaggerAppCompatActivity() {
                         finish()
                     }
                     else -> {
-                        changeVisiblility(false)
+                        changeProgressBarVisibility(false)
                         hideKeyboard()
                         data.error?.let { error ->
                             showError(error)
@@ -179,7 +174,7 @@ class RegisterActivity : DaggerAppCompatActivity() {
         })
     }
 
-    private fun changeVisiblility(visible: Boolean) {
+    private fun changeProgressBarVisibility(visible: Boolean) {
         progressBar.visibility = if (visible) View.VISIBLE else View.GONE
         progressBar.isIndeterminate = visible
     }
@@ -188,23 +183,6 @@ class RegisterActivity : DaggerAppCompatActivity() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(check)
             setDisplayShowHomeEnabled(check)
-        }
-    }
-
-    private fun createToast(message: String) {
-        Toast.makeText(
-            this,
-            message,
-            Toast.LENGTH_LONG
-        ).show()
-    }
-
-    private fun hideKeyboard() {
-        currentFocus?.let {
-            (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                it.windowToken,
-                0
-            )
         }
     }
 

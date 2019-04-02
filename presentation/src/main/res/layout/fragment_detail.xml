@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+    <android.support.constraint.ConstraintLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    >
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                tools:src="@drawable/ic_close_black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+                android:text="Esto es una prueba de la descripción de una tarjeta sdfjkalsjdfkljaslkdjflkasj
+dfjalksdfjalksjdflkasjdfklaj asdfjklasjkdfljaskldjfa sdfklajsdklfjsalkdfj asdfjkasldfjlkasdjf askdjflkasdjflkajsdlkf asdjfklsadjflaksdjfklajdslkfjasd fjaskdljfalksdjf alksdjflkasdj flkjasd gajksfljasdhkjfhas dfjhaldkjfhas jdhfka sdfhjka dkjahdskfj dhksfhasdkj fhadkjshfk sahdf kjadsadklsfakjdsfjhajkds fhjkad fkahdfs kjasdkjfashf adsfadsfhjkadsf hjkad sfkjadsfhjkasdhf kjadshfjkahdf kjladskfakjlds fahksdlf alkdjshfa kjlsdf alsjdfakjsdafkjsdfksadfkalsdfafldkjfadsfakshfd ksajhfjk asdhfjka dshjf hajkdsfhasdjkf akjdsl fa dsfhad lfhlasdjkfhadls fjkha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" android:id="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

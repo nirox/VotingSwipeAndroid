@@ -1,4 +1,4 @@
-package com.mobgen.presentation.swipe
+package com.mobgen.presentation.swipe.swipeView
 
 import android.animation.Animator
 

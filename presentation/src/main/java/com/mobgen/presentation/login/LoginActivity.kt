@@ -1,4 +1,4 @@
-package com.mobgen.presentation
+package com.mobgen.presentation.login
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
@@ -6,12 +6,19 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.mobgen.presentation.registerActivity.RegisterActivity
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import com.mobgen.presentation.BaseActivity
+import com.mobgen.presentation.BaseViewModel
+import com.mobgen.presentation.R
+import com.mobgen.presentation.ViewModelFactory
+import com.mobgen.presentation.register.RegisterActivity
+import com.mobgen.presentation.swipe.SwipeActivity
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.login_main.*
+import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-class LoginActivity : DaggerAppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -23,16 +30,20 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_main)
+        setContentView(R.layout.activity_login)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
 
         loginButton.setOnClickListener {
+            hideKeyboard()
             viewModel.authenticate(email.text.toString(), password.text.toString())
         }
 
         goToRegister.setOnClickListener {
-            startActivityForResult(RegisterActivity.newInstance(this), CODE_REQUEST_REGISTER)
+            startActivityForResult(
+                RegisterActivity.newInstance(this),
+                CODE_REQUEST_REGISTER
+            )
         }
 
         viewModel.data.observe(this, Observer {
@@ -40,15 +51,16 @@ class LoginActivity : DaggerAppCompatActivity() {
 
                 when (data.status) {
                     BaseViewModel.Status.LOADING -> {
-                        changeVisiblility(true)
+                        changeProgressBarVisibility(true)
                     }
                     BaseViewModel.Status.SUCCESS -> {
-                        changeVisiblility(false)
-                        //TODO go to next activity, user authenticated
+                        changeProgressBarVisibility(false)
+                        goSwipe()
                     }
                     BaseViewModel.Status.ERROR -> {
-                        changeVisiblility(false)
-                        //TODO show dialog with user or password wrong
+                        changeProgressBarVisibility(false)
+                        hideKeyboard()
+                        Toast.makeText(this, data.errorMessage, Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -57,6 +69,7 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == CODE_REQUEST_REGISTER && resultCode == Activity.RESULT_OK) {
             data?.let {
                 viewModel.authenticate(
@@ -67,8 +80,14 @@ class LoginActivity : DaggerAppCompatActivity() {
         }
     }
 
-    private fun changeVisiblility(visible: Boolean) {
+    private fun changeProgressBarVisibility(visible: Boolean) {
         progressBar.visibility = if (visible) View.VISIBLE else View.GONE
         progressBar.isIndeterminate = visible
     }
+
+
+    private fun goSwipe() {
+        startActivity(SwipeActivity.newInstance(this))
+    }
+
 }

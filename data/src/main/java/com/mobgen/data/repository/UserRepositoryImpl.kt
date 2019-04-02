@@ -15,6 +15,11 @@ class UserRepositoryImpl @Inject constructor(
     private val userDataMapper: UserDataMapper,
     private val firebaseDataResource: FirebaseDataResource
 ) : UserRepository {
+    override fun getUsers(): Single<List<User>> {
+        //TODO
+        return Single.create { emitter -> emitter.onSuccess(listOf()) }
+    }
+
     companion object {
         private var userCache: User? = null
     }
@@ -36,5 +41,10 @@ class UserRepositoryImpl @Inject constructor(
                 }
             )
         }
+    }
+
+    override fun update(user: User): Completable {
+        //TODO
+        return Completable.create { emitter -> emitter.onComplete() }
     }
 }

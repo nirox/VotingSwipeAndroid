@@ -19,6 +19,7 @@
                 android:id="@+id/containerBottom"
                 android:layout_width="0dp"
                 android:layout_height="500dp"
+                android:visibility="gone"
                 android:layout_marginStart="40dp"
                 android:layout_marginEnd="40dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -75,6 +76,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/containerTop"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:translationZ="1dp"
                 android:layout_height="500dp"
@@ -146,6 +148,22 @@
                 app:layout_constraintStart_toEndOf="@+id/noLike"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintTop_toTopOf="@+id/noLike" android:background="@drawable/ic_like"/>
+
+        <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:translationZ="3dp"
+                android:visibility="gone"
+                android:id="@+id/progressBar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:visibility="visible"
+        />
+
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>

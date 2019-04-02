@@ -53,6 +53,7 @@ dependencies {
 
     implementation "com.google.firebase:firebase-core:$firebase_version"
     implementation "com.google.firebase:firebase-database:$firebaseDatabase_version"
+    implementation "com.google.firebase:firebase-storage:$firebaseStorage_version"
 
     implementation project(':domain')
 }

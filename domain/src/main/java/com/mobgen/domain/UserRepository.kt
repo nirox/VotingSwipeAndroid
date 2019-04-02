@@ -8,4 +8,6 @@ interface UserRepository {
     fun auth(email: String, password: String): Single<User>
     fun register(user: User, password: String): Completable
     fun getAuthUser(): Single<User>
+    fun getUsers() : Single<List<User>>
+    fun update(user: User) : Completable
 }

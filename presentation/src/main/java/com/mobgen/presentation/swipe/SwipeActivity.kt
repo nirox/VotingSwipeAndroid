@@ -6,16 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.widget.Toast
+import android.view.View
+import com.mobgen.presentation.BaseActivity
 import com.mobgen.presentation.BaseViewModel
 import com.mobgen.presentation.R
 import com.mobgen.presentation.ViewModelFactory
-import dagger.android.support.DaggerAppCompatActivity
+import com.mobgen.presentation.swipe.detail.DetailFragment
+import com.mobgen.presentation.swipe.swipeView.SwipeViewManager
 import kotlinx.android.synthetic.main.activity_swipe.*
 import javax.inject.Inject
 
 
-class SwipeActivity : DaggerAppCompatActivity() {
+class SwipeActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -38,13 +40,30 @@ class SwipeActivity : DaggerAppCompatActivity() {
 
                 when (data.status) {
                     BaseViewModel.Status.LOADING -> {
-                        //TODO
+                        changeProgressBarVisibility(true)
                     }
                     BaseViewModel.Status.SUCCESS -> {
-                        //TODO
+                        val metrics = DisplayMetrics()
+                        windowManager.defaultDisplay.getMetrics(metrics)
+                        swipeViewManager = SwipeViewManager(
+                            containerTop,
+                            containerBottom,
+                            it.usersViewData,
+                            metrics.widthPixels / 2f,
+                            object : SwipeViewManager.Listener() {
+                                override fun onSwipe(position: Int) {
+                                    viewModel.addLike(position)
+                                }
+
+                                override fun onCardClick(position: Int) {
+                                    goDetail(viewModel.getUserBindView(position))
+                                }
+                            })
+                        changeProgressBarVisibility(false)
                     }
                     BaseViewModel.Status.ERROR -> {
-                        //TODO
+                        createToast(getString(R.string.errorLoadUsers))
+                        changeProgressBarVisibility(false)
                     }
                 }
             }
@@ -52,6 +71,11 @@ class SwipeActivity : DaggerAppCompatActivity() {
 
         initView()
         iniListeners()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun iniListeners() {
@@ -65,29 +89,36 @@ class SwipeActivity : DaggerAppCompatActivity() {
     }
 
     private fun initView() {
-        val metrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(metrics)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
+        viewModel.init()
+    }
 
+    private fun changeProgressBarVisibility(visible: Boolean) {
+        progressBar.visibility = if (visible) View.VISIBLE else View.GONE
+        progressBar.isIndeterminate = visible
+    }
 
-        val list = listOf(
-            SwipeViewModel.UserBindView(listOf("https://www.mainewomensnetwork.com/Resources/Pictures/vicki%20aqua%20headshot-smallmwn.jpg")),
-            SwipeViewModel.UserBindView(listOf("https://firebasestorage.googleapis.com/v0/b/votingswipe.appspot.com/o/-LayG7v8_iWdbi088SX8%2Frivers.jpg?alt=media&token=5e552d03-c137-4bc0-9661-0487e795adea")),
-            SwipeViewModel.UserBindView(listOf("https://firebasestorage.googleapis.com/v0/b/votingswipe.appspot.com/o/-Layg8IJv6XMslGedfT9%2FuserPhoto.jpg?alt=media&token=829a6e4e-ff19-4283-921c-5e7f7de1cd95")),
-            SwipeViewModel.UserBindView(listOf("https://www.mainewomensnetwork.com/Resources/Pictures/vicki%20aqua%20headshot-smallmwn.jpg")),
-            SwipeViewModel.UserBindView(listOf("https://firebasestorage.googleapis.com/v0/b/votingswipe.appspot.com/o/-LayG7v8_iWdbi088SX8%2Frivers.jpg?alt=media&token=5e552d03-c137-4bc0-9661-0487e795adea"))
-        )
-
-        swipeViewManager = SwipeViewManager(
-            containerTop,
-            containerBottom,
-            list,
-            metrics.widthPixels / 2f,
-            object : SwipeViewManager.Listener() {
-                override fun onSwipe(position: Int) {
-                   viewModel.addLike(position)
-                }
-            })
-
+    private fun goDetail(userBindView: SwipeViewModel.UserBindView) {
+        val topContainer = swipeViewManager.getTopView()
+        val imageViewTop =  if(topContainer == containerTop) imageViewTop else imageViewBottom
+        supportFragmentManager
+            .beginTransaction()
+            .addSharedElement(imageViewTop, imageViewTop.transitionName)
+            .replace(
+                R.id.main_content,
+                DetailFragment.newInstance(
+                    userBindView.name,
+                    userBindView.photo.first(),
+                    userBindView.description,
+                    userBindView.date,
+                    imageViewTop.transitionName
+                )
+            )
+            .addToBackStack(null)
+            .commit()
     }
 
 }

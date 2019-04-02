@@ -1,10 +1,10 @@
 package com.mobgen.votingswipe.di
 
 import android.content.Context
+import com.mobgen.presentation.detail.DetailActivity
 import com.mobgen.presentation.swipe.SwipeActivity
 import com.mobgen.presentation.login.LoginActivity
 import com.mobgen.presentation.register.RegisterActivity
-import com.mobgen.presentation.swipe.detail.DetailFragment
 import com.mobgen.votingswipe.VotingSwipeApplication
 import dagger.Binds
 import dagger.Module
@@ -22,7 +22,7 @@ abstract class MainModule {
     abstract fun getSwipeActivity(): SwipeActivity
 
     @ContributesAndroidInjector
-    abstract fun getDetailFragment(): DetailFragment
+    abstract fun getDetailActivity(): DetailActivity
 
     @Binds
     abstract fun provideApplicationContext(application: VotingSwipeApplication): Context

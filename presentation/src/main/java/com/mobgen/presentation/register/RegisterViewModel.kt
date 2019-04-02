@@ -32,7 +32,7 @@ class RegisterViewModel(private val register: Register) : BaseViewModel<Register
         photos: List<String>
     ) {
 
-        checkRegistrationFields(name, date, email, password, description).check(
+        checkRegistrationFields(name, date, email, password, description, photos).check(
             ifNotNull = { errorRegister ->
                 data.postValue(registerViewData.apply {
                     status = Status.ERROR
@@ -80,7 +80,8 @@ class RegisterViewModel(private val register: Register) : BaseViewModel<Register
         date: String,
         email: String,
         password: String,
-        description: String
+        description: String,
+        photos: List<String>
     ): ErrorRegister? {
         when {
             name.isBlank() -> {
@@ -97,6 +98,9 @@ class RegisterViewModel(private val register: Register) : BaseViewModel<Register
             }
             description.isBlank() -> {
                 return ErrorRegister.DESCRIPTION
+            }
+            photos.isEmpty() -> {
+                return ErrorRegister.NOT_PHOTO
             }
             else -> {
                 return null
@@ -117,7 +121,8 @@ class RegisterViewModel(private val register: Register) : BaseViewModel<Register
         DESCRIPTION,
         NOT_REGISTERED,
         USER_EXISTS,
-        NOT_KEY
+        NOT_KEY,
+        NOT_PHOTO
     }
 }
 

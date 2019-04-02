@@ -7,6 +7,7 @@ import javax.inject.Inject
 class UserBindViewMapper @Inject constructor() : ViewMapper<User, SwipeViewModel.UserBindView> {
     override fun map(value: User): SwipeViewModel.UserBindView {
         return SwipeViewModel.UserBindView(
+            value.id,
             value.name,
             value.description,
             value.birthDay,

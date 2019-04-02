@@ -5,13 +5,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.util.DisplayMetrics
 import android.view.View
 import com.mobgen.presentation.BaseActivity
 import com.mobgen.presentation.BaseViewModel
 import com.mobgen.presentation.R
 import com.mobgen.presentation.ViewModelFactory
-import com.mobgen.presentation.swipe.detail.DetailFragment
+import com.mobgen.presentation.detail.DetailActivity
 import com.mobgen.presentation.swipe.swipeView.SwipeViewManager
 import kotlinx.android.synthetic.main.activity_swipe.*
 import javax.inject.Inject
@@ -26,7 +27,10 @@ class SwipeActivity : BaseActivity() {
     private lateinit var swipeViewManager: SwipeViewManager
 
     companion object {
-        fun newInstance(context: Context): Intent = Intent(context, SwipeActivity::class.java)
+        fun newInstance(context: Context): Intent = Intent(context, SwipeActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,11 +77,6 @@ class SwipeActivity : BaseActivity() {
         iniListeners()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     private fun iniListeners() {
         like.setOnClickListener {
             swipeViewManager.swipe()
@@ -89,10 +88,6 @@ class SwipeActivity : BaseActivity() {
     }
 
     private fun initView() {
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-        }
         viewModel.init()
     }
 
@@ -103,22 +98,20 @@ class SwipeActivity : BaseActivity() {
 
     private fun goDetail(userBindView: SwipeViewModel.UserBindView) {
         val topContainer = swipeViewManager.getTopView()
-        val imageViewTop =  if(topContainer == containerTop) imageViewTop else imageViewBottom
-        supportFragmentManager
-            .beginTransaction()
-            .addSharedElement(imageViewTop, imageViewTop.transitionName)
-            .replace(
-                R.id.main_content,
-                DetailFragment.newInstance(
-                    userBindView.name,
-                    userBindView.photo.first(),
-                    userBindView.description,
-                    userBindView.date,
-                    imageViewTop.transitionName
-                )
-            )
-            .addToBackStack(null)
-            .commit()
+        val imageViewTop = if (topContainer == containerTop) imageViewTop else imageViewBottom
+        val options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(this, imageViewTop, imageViewTop.transitionName)
+                .toBundle()
+        startActivity(
+            DetailActivity.newInstance(
+                this, userBindView.name,
+                userBindView.photo.first(),
+                userBindView.description,
+                userBindView.date,
+                imageViewTop.transitionName
+            ),
+            options
+        )
     }
 
 }

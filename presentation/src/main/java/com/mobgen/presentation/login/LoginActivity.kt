@@ -88,6 +88,7 @@ class LoginActivity : BaseActivity() {
 
     private fun goSwipe() {
         startActivity(SwipeActivity.newInstance(this))
+        finish()
     }
 
 }

@@ -13,10 +13,11 @@
     <string name="fill">Please fill %1$s field %2$s</string>
     <string name="symbols">using @ and . symbols</string>
     <string name="slashes">using format dd/mm/yyyy</string>
-    <string name="minChars">%1$s field must have 6 characters at least</string>
+    <string name="minChars">field must have 6 characters at least</string>
     <string name="notRegistered">User can not be registered</string>
     <string name="userExists">Email already exists</string>
     <string name="notKey">Could not get push key for users</string>
+    <string name="notPhoto">Please select a photo</string>
     <string name="upload">Upload</string>
     <string name="take">Take</string>
     <string name="errorLoadUsers">Users can not be loaded</string>

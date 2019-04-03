@@ -84,8 +84,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/settings"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintBottom_toTopOf="@+id/noLike"
-            app:cardBackgroundColor="@android:color/holo_green_dark">
+            app:layout_constraintBottom_toTopOf="@+id/noLike">
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -137,7 +136,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="15dp"
             android:id="@+id/settings"
-            android:background="@drawable/ic_menu" android:layout_marginTop="16dp" android:layout_marginEnd="16dp"/>
+            android:background="@drawable/ic_exit" android:layout_marginTop="16dp" android:layout_marginEnd="16dp"/>
     <Button
         android:layout_width="100dp"
         android:layout_height="100dp"

@@ -13,6 +13,7 @@ import com.mobgen.presentation.BaseViewModel
 import com.mobgen.presentation.R
 import com.mobgen.presentation.ViewModelFactory
 import com.mobgen.presentation.detail.DetailActivity
+import com.mobgen.presentation.login.LoginActivity
 import com.mobgen.presentation.swipe.swipeView.SwipeViewManager
 import kotlinx.android.synthetic.main.activity_swipe.*
 import javax.inject.Inject
@@ -84,6 +85,10 @@ class SwipeActivity : BaseActivity() {
 
         noLike.setOnClickListener {
             swipeViewManager.rewind()
+        }
+        settings.setOnClickListener{
+            startActivity(LoginActivity.newInstance(this))
+            finish()
         }
     }
 

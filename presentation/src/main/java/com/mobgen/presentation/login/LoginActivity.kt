@@ -3,10 +3,10 @@ package com.mobgen.presentation.login
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.mobgen.presentation.BaseActivity
 import com.mobgen.presentation.BaseViewModel
@@ -14,7 +14,6 @@ import com.mobgen.presentation.R
 import com.mobgen.presentation.ViewModelFactory
 import com.mobgen.presentation.register.RegisterActivity
 import com.mobgen.presentation.swipe.SwipeActivity
-import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -26,6 +25,10 @@ class LoginActivity : BaseActivity() {
 
     companion object {
         const val CODE_REQUEST_REGISTER = 1
+        fun newInstance(context: Context): Intent = Intent(context, LoginActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

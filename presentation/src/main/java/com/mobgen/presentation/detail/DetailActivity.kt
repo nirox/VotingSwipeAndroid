@@ -69,7 +69,7 @@ class DetailActivity : BaseActivity() {
         }
 
         profileName.text = intent.getStringExtra(ARG_NAME).addSuffix(", ")
-        profileDescription.text = intent.getStringExtra(ARG_NAME)
+        profileDescription.text = intent.getStringExtra(ARG_DESCRIPTION)
         profileAge.text = intent.getStringExtra(ARG_DATE)
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.transition.Fade
 import android.transition.TransitionInflater
+import com.mobgen.domain.addSuffix
 import com.mobgen.presentation.BaseActivity
 import com.mobgen.presentation.R
 import com.mobgen.presentation.load
@@ -66,6 +67,10 @@ class DetailActivity : BaseActivity() {
             excludeTarget(android.R.id.navigationBarBackground, true)
             excludeTarget(R.id.action_bar_container, true)
         }
+
+        profileName.text = intent.getStringExtra(ARG_NAME).addSuffix(", ")
+        profileDescription.text = intent.getStringExtra(ARG_NAME)
+        profileAge.text = intent.getStringExtra(ARG_DATE)
     }
 
 
